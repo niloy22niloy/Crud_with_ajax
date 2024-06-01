@@ -47,12 +47,14 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Insert Data</h3>
+                        
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="" class="form-label">Username</label>
                             <input type="text" class="form-control" name="username" id="username">
-                        </div>
+                            
+                          
                         <div class="mb-3">
                             <label for="" class="form-label">Email</label>
                             <input type="email" class="form-control" name="email" id="email">
@@ -133,15 +135,28 @@
                      console.log(res);
                      if(res.status =='success'){
                       alert(res.message);
-                     }
                       window.location.reload();
+                     }else{
+                      if(res.errors.username){
+                        alert(res.errors.username);
+
+                      }
+                      if(res.errors.email){
+                        alert(res.errors.email);
+
+
+                      }
+                      if(res.errors.password){
+                        alert(res.errors.password);
+
+                      }
+                   
+
+                     }
+                     
   
                   },
-                  error: function(err) {
-                      alert('Error: ' + err.statusText);
-                      $('#spinner').hide();
-  
-                  }
+                  
               });
   
           })

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User_login;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserRegisterController extends Controller
 {
@@ -37,33 +38,49 @@ class UserRegisterController extends Controller
         ]);
     }
     public function data_insert(Request $request){
-        try {
-            // $request->validate([
-            //     'name' => 'required|string|max:255|unique:category_models,name',
-            //     'status'=>'required'
-               
-            // ]);
+       
+      
+        $validator = Validator::make($request->all(), [
+            'username'=> 'required',
+            'email'=>'required',
+            'password'=>'required',
             
-                $register = User_login::create([
-                    'user_name'=>$request->username,
-                    'email'=>$request->email,
-                    'password'=>bcrypt($request->password),
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages()
+            ]);
+        }else{
+            $register = User_login::create([
+                'user_name'=>$request->username,
+                'email'=>$request->email,
+                'password'=>bcrypt($request->password),
+            ]);
+
+            if($register){
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Inserted Data successfully',
+                    // 'name' => $request->name,
+                    // 'id'=>$category->id,
+                    // 'status' => $request->status
                 ]);
-              
-                
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Inserted Data successfully',
-                // 'name' => $request->name,
-                // 'id'=>$category->id,
-                // 'status' => $request->status
-            ]);
-        } catch (\Exception $e) {
-            // Return error message
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ]);
+            }
+          
+            
+       
+    else {
+        // Return error message
+        return response()->json([
+            'status' => 'error',
+            'message' => "sorry Something is wrong",
+        ]);
+    }
         }
+            
+               
     }
 }
