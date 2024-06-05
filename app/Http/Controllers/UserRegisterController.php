@@ -28,7 +28,7 @@ class UserRegisterController extends Controller
     $authenticatedUser = Auth::guard('user')->user();
 
     // Return the username of the authenticated user
-    return response()->json(['username' => $authenticatedUser->user_name]);
+    return redirect()->route('user.page');
     
     }
     public function page(){
@@ -82,5 +82,34 @@ class UserRegisterController extends Controller
         }
             
                
+    }
+    public function user_logout(){
+        return "hello";
+    }
+    public function user_edit(Request $request){
+        $re = $request->all();
+     if($re){
+        $user = User_login::find($request->id);
+
+        User_login::find($request->id)->update([
+            'user_name'=>$request->name,
+            
+        ]);
+        return response()->json([
+            'status'=>'success',
+            'user'=>$user->user_name,
+          
+            
+       ]);
+     }
+    }
+    public function user_delete(Request $request){
+        $user = User_login::find($request->id)->delete();
+        if($user){
+            return response()->json([
+                'status'=>'success'
+            ]);
+        }
+
     }
 }
